@@ -1,0 +1,18 @@
+h1 {
+    text-align: center;
+    color: blue;
+}
+
+h2 {
+    text-align: center;
+    color: red;
+}
+
+p {
+    text-align: center;
+}
+
+.line {
+    text-decoration: underline;
+    font-weight: bold;
+}
