@@ -83,7 +83,7 @@
     <?php
         $count = 0;
         foreach ($dico as $value) {
-            if ($value[strlen($value)-1] == "q") {
+            if ($value[strlen($value) -1] == "q") {
                 $count++;
             }
         }
@@ -100,7 +100,7 @@
     <?php
         $string = file_get_contents("films.json", FILE_USE_INCLUDE_PATH);
         $brut = json_decode($string, true);
-        $top = $brut["feed"]["entry"]; # liste de films
+        $GLOBALS['top'] = $brut["feed"]["entry"]; # liste de films
         // var_dump($top);
 
         //exception qui test que la liste de films est bien chargé!!
@@ -123,11 +123,22 @@
 
     <p class='line'>Afficher le top10 des films?</p>
     <?php
-        foreach ($top as $index => $array) {
-            if ($index < 9) {
-                echo '<p>'.$array['title']['label'].'</p>'; 
-            }
+        //ici j'ai fait une fonction pour pouvoir faire un test unitaire
+        function topTen() {
+            $topFilm = [];
+            foreach ($GLOBALS['top'] as $index => $array) {
+                if ($index < 10) {
+                    // $text .= '<p>'.$array['title']['label'].'</p>';
+                    $topFilm[$index] = $array['title']['label'];
+                }
+            } 
+            foreach ($topFilm as $key => $value) {
+            echo '<p>'.$value.'</p>';
         }
+            return $topFilm;
+        }
+        topTen();
+
     ?>
     <br><br><br>
 
@@ -135,9 +146,9 @@
 
     <p class='line'>Quel est le classement du film « Gravity » ?<p>
     <?php
-        foreach ($top as $key => $array) {
+        foreach ($GLOBALS['top'] as $key => $array) {
             if($array['im:name']['label'] == "Gravity") {
-                echo '<p>le classement de Gravity est '.$key.'eme.</p>';
+                echo '<p>le classement de Gravity est '.($key + 1).'eme.</p>';
             }
         }
     ?>
@@ -148,7 +159,7 @@
     <p class='line'>Combien de films sont sortis avant 2000 ?<p>
     <?php
         $count = 0;
-        foreach ($top as $key => $value) {
+        foreach ($GLOBALS['top'] as $key => $value) {
             if(substr($value["im:releaseDate"]["label"], 0, 4) < 2000) {
                 $count ++;
             }
@@ -162,7 +173,7 @@
     <p class='line'>Quel est le film le plus récent ? Le plus vieux ?<p>
     <?php
         $arr = [];
-        foreach ($top as $key => $value) {
+        foreach ($GLOBALS['top'] as $key => $value) {
             $arr[$value["im:name"]["label"]] = substr($value["im:releaseDate"]["label"], 0, 10);
         }
         foreach ($arr as $key => $value) {
@@ -181,7 +192,7 @@
     <p class='line'>Quelle est la catégorie de films la plus représentée ?<p>
     <?php
         $array = [];
-        foreach ($top as $key => $value) {
+        foreach ($GLOBALS['top'] as $key => $value) {
             array_push($array, $value["category"]["attributes"]["label"]);
         }
         $arrMax = array_count_values($array);
@@ -198,7 +209,7 @@
     <p class='line'>Quel est le réalisateur le plus présent dans le top100 ?<p>
     <?php
         $arr = [];
-        foreach ($top as $key => $value) {
+        foreach ($GLOBALS['top'] as $key => $value) {
             array_push($arr, $value["im:artist"]["label"]);
         }
         $arrMax = array_count_values($arr);
@@ -215,7 +226,7 @@
     <p class='line'>Combien cela coûterait-il d'acheter le top10 sur iTunes ? de le louer ?<p>
     <?php
         $arr = [];
-        foreach ($top as $key => $value) {
+        foreach ($GLOBALS['top'] as $key => $value) {
             if ($key < 10) {
                array_push($arr, substr($value["im:price"]["label"], 1, 5)); 
             }
@@ -224,7 +235,7 @@
     ?>
     <?php
         $arr = [];
-        foreach ($top as $key => $value) {
+        foreach ($GLOBALS['top'] as $key => $value) {
             if ($key < 10) {
                array_push($arr, substr($value["im:rentalPrice"]["label"], 1, 5)); 
             }
@@ -239,7 +250,7 @@
     <?php
         $mois = [];
         $cal = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"];
-        foreach ($top as $key => $value) {
+        foreach ($GLOBALS['top'] as $key => $value) {
             array_push($mois, substr($value["im:releaseDate"]["label"], 5, 2));
         }
         $dateVal = array_count_values($mois);
@@ -257,7 +268,7 @@
     <?php
         $prix = [];
         $stopCount = 0;
-        foreach ($top as $key => $value) {
+        foreach ($GLOBALS['top'] as $key => $value) {
             $prix[$value["im:name"]["label"]] = substr($value["im:price"]["label"], 1, 5);
         }
         asort($prix);

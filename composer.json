@@ -1,5 +1,15 @@
 {
+    "name": "omni/php-crunching",
+    "scripts": {
+        "test": "./vendor/bin/phpunit tests/test.php"
+    },
+    "authors": [
+        {
+            "name": "Omniprezz",
+            "email": "geoffrey.frioli@gmail.com"
+        }
+    ],
     "require": {
-        "phpunit/phpunit": "^6"
+        "phpunit/phpunit": "^6.5"
     }
 }
